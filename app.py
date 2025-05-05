@@ -159,7 +159,10 @@ df['position'] = df['position'].ffill().fillna(0)
 df['return'] = df['close'].pct_change()
 df['strategy_return'] = df['return'] * df['position']
 cumulative_strategy_return = (1 + df['strategy_return']).cumprod()
-total_return = cumulative_strategy_return.iloc[-1] - 1
+if not cumulative_strategy_return.empty:
+    total_return = cumulative_strategy_return.iloc[-1] - 1
+else:
+    total_return = 0 
 
 buy_count = df['buy_signal'].notna().sum()
 sell_count = df['sell_signal'].notna().sum()
